@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<link rel="stylesheet" type="text/css" href="jasmine-2.8.0/jasmine.css">
+
+<script src="jquery-1.11.3.min.js"></script>
+
+<script src="/js/jasmine-2.8.0/jasmine-2.8.0/jasmine.js"></script>
+<script src="/js/jasmine-2.8.0/jasmine-2.8.0/jasmine-html.js"></script>
+<script src="/js/jasmine-2.8.0/jasmine-2.8.0/boot.js"></script>
+</head>
+
+<body>
+	<h1>ajax demo</h1>
+	<div id="msg"></div>
+	<script>
+		jasmine.DEFAULT_TIMEOUT_INTERVAL = 1000;
+
+		$("#msg").ajaxComplete(function(event, request, settings) {
+			$(this).append("<li>请求完成.</li>");
+		});
+
+		var base = "http://114.55.235.36:7008";
+
+		describe("ajax跨域测试", function() {
+
+
+            // ajaxRequest(getServUrl("/auth/user/delete?ids="+ids), "DELETE",{},
+            //     function(r){
+            //         if(r.success){
+            //             layer.msg("操作成功！", {icon: 1, time:1600});
+            //             grid.reloadData();
+            //         }else{
+            //             layer.msg(r.message, {icon: 7, time:1600});
+            //             grid.reloadData();
+            //         }
+            //     });
+
+
+            it("getWithCookie带cookie的请求", function(done) {
+                var result;
+                var token = cookieUtil.get("token");
+                $.ajax({
+                    type : "post",
+                    url : base + "/oauth/getUserLimit",
+                    xhrFields : {
+                        withCredentials : true
+                    },
+                    contentType:contentType|| "application/x-www-form-urlencoded",
+                    headers: {'Cookie' : document.cookie },
+                    headers: {'Authorization': token},
+                    dataType : "jsonp",
+                    success : function(data) {
+                        result = data;
+                    }
+                })
+
+                setTimeout(function() {
+                    expect(result).toEqual({
+                        "code" : 0,
+                        "msg" : "success",
+                        "data" : "getWithCookie ok, cookie1=null"
+                    });
+                    done();
+                }, 100);
+            });
+
+
+
+		});
+	</script>
+
+</body>
+</html>

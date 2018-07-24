@@ -1,0 +1,90 @@
+phoenix:
+  #zookeeper所在主机地址
+  #zk_url: hb-proxy-pub-bp11zgdd317e4af0r-001.hbase.rds.aliyuncs.com,hb-proxy-pub-bp11zgdd317e4af0r-006.hbase.rds.aliyuncs.com,hb-proxy-pub-bp11zgdd317e4af0r-005.hbase.rds.aliyuncs.com
+  zk_url: hb-proxy-pub-bp1xa9wgerhn7o1pu-001.hbase.rds.aliyuncs.com,hb-proxy-pub-bp1xa9wgerhn7o1pu-002.hbase.rds.aliyuncs.com,hb-proxy-pub-bp1xa9wgerhn7o1pu-003.hbase.rds.aliyuncs.com
+server:
+  port: 11117
+
+spring:
+  redis:
+    host: 127.0.0.1
+  kafka:
+    bootstrap-servers: 127.0.0.1:9092
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      max-poll-records: 500
+      enable-auto-commit: true
+      auto-commit-interval: 500
+      auto-offset-reset: latest
+
+#kafka topic
+kafka:
+  consumer:
+    group:
+      storage:
+        gb:
+          message: cgrp_storage_gb_message                #规则引擎转发GB正常数据     消费者组
+          error: cgrp_storage_gb_err                      #规则引擎转发GB错误数据     消费者组
+        can: cgrp_storage_can                             #规则引擎转发CAN数据       消费者组
+        can-exp: cgrp_storage_can_exp                     #规则引擎转发CAN异常数据    消费者组
+        mqtt:
+          state: cgrp_storage_mqtt_state                  #规则引擎转发MQTT正常数据   消费者组
+          state-exp: cgrp_storage_mqtt_state_exp          #规则引擎转发MQTT异常数据   消费者组
+        jt808:
+          position: cgrp_storage_jt_position              #规则引擎转发808位置正常数据 消费者组
+          position-exp: cgrp_storage_jt_position_exp      #规则引擎转发808位置异常数据 消费者组
+          error: cgrp_storage_808_err                     #规则引擎转发808错误数据    消费者组
+        tbox:
+          log: cgrp_storage_tbox_log                      #车机网络日志             消费者组
+          log-exp: cgrp_storage_tbox_log_exp              #车机异常网络日志          消费者组
+  topic:
+    history:
+      gb:
+        message: topic_gb_message
+        error: topic_gb_message_err
+      can: topic_can
+      can-exp: topic_can_exp
+      mqtt:
+        state: topic_mqtt_state
+        state-exp: topic_mqtt_state_exp
+      jt808:
+        position: topic_jt_position
+        position-exp: topic_jt_position_exp
+        error: topic_808_message_err
+      tbox:
+        log: topic_tbox_log
+        log-exp: topic_tbox_log_exp
+
+dubbo:
+  scan:
+    annotationPackage: com.ccclubs.storage
+  application:
+    name: storage-srv
+  registry:
+    address: 127.0.0.1:2181
+    protocol: zookeeper
+    port: 20660
+  protocol:
+    name: dubbo
+    threads: 100
+    #host: 10.0.10.96
+    port: 20660
+  provider:
+    timeout: 120000
+    retries: -1
+
+ccclubs:
+  data:
+    #批量任务配置
+    batch:
+      #批量更新单次最大值，最大间隔时间，线程池数量，队列最大长度
+      updateBatchSize: 1000
+      updateMaxDurTime: 3000
+      updateThreads: 20
+      updateQueueMax: 50000
+      #批量写入mongodb单次最大值，最大间隔时间，线程池数量，队列最大长度
+      mongoInsertBatchSize: 2000
+      mongoInsertMaxDurTime: 10000
+      mongoInsertThreads: 20
+      mongoInsertQueueMax: 200000

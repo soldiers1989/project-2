@@ -1,0 +1,27 @@
+server:
+  port: 11112
+spring:
+  application:
+    name: config
+  profiles:
+    active: ${profiles.active}
+  cloud:
+    config:
+      server:
+        encrypt: 
+          #是否暴露加解密接口
+          enabled: true
+        git:
+          uri: file://${project.parent.parent.basedir} #http://120.26.220.241/BurningGroup/vc.git file://E:/workspace-vc/vc
+          searchPaths:  vc-env/env
+          username: zhangkejiang
+          password: ss123456
+          #取分支 默认master
+          default-label: develop
+
+encrypt:
+  keyStore:
+    location: classpath:/vckey.jks
+    password: ccclubs2017Ofstore
+    alias: vckey
+    secret: ccclubs2017Ofkey

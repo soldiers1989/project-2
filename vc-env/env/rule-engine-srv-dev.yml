@@ -1,0 +1,212 @@
+server:
+  port: 11115
+
+spring:
+  redis:
+    host: 118.178.229.234
+    port: 63791
+    password: WDnlDnt6f7GuYh
+    database: 7
+    pool:
+      maxIdle: 10
+      minIdle: 2
+      maxActive: 64
+      maxWait: -1
+  data:
+    mongodb:
+      history:
+        host: 114.55.24.97
+        port: 3717
+        username: zkj_user
+        password: zkj2017
+        database: vc_history
+        authenticationDatabase: vc_history
+      remote:
+        host: 114.55.24.97
+        port: 3717
+        username: zkj_user
+        password: zkj2017
+        database: vc_remote
+        authenticationDatabase: vc_remote
+  kafka:
+    bootstrap-servers: 127.0.0.1:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      max-poll-records: 500
+      enable-auto-commit: true
+      auto-commit-interval: 500
+      auto-offset-reset: latest
+
+#kafka GB实时数据 topic
+kafka:
+  consumer:
+    group:
+      rule:
+        conn: cgrp_rule_conn                   #车辆上下线数据 消费者组
+        gateway:
+          error: cgrp_rule_gateway_error       #GB网关上报错误数据（协议层面） 消费者组
+        gb:
+          success: cgrp_rule_gb_success        #GB网关上报正常数据 消费者组
+        stream:
+          energy-jump: cgrp_rule_energy_jump   #跳变数据（实时计算）消费者组
+          activity-pace: cgrp_rule_activity_pace   #跳变数据（实时计算）消费者组
+  topic:
+    gateway: #IN 接收网关的数据
+      conn: topic_conn_status                  #车辆上下线数据
+      error: topic_gateway_error               #网关错误报文（协议层面）
+      gb:
+        success: topic_gb_success              #GB网关正常报文
+      jt808:
+        success: topic_808_success              #808网关正常报文
+    stream: #IN 接收实时计算（Flink）的数据
+      energy-jump: topic_stream_energy_jump      #跳变数据
+      activity-pace: topic_stream_activity_pace  #行为阶段数据
+    gb: #OUT 发送到下游
+      success-login: topic_gb_0x01             #GB报文-车辆登入
+      success-real: topic_gb_0x02              #GB报文-实时信息上报
+      success-reissue: topic_gb_0x03           #GB报文-补发信息上报
+      success-logout: topic_gb_0x04            #GB报文-车辆登出
+      success-heart: topic_gb_0x07             #GB报文-心跳
+      success-time: topic_gb_0x08              #GB报文-终端校时
+    history: #OUT 发送到下游
+      conn: topic_online_event
+      gb:
+        message: topic_gb_message              #GB历史数据
+        error: topic_gb_message_err            #GB错误数据
+      can: topic_can                           #CAN历史数据
+      can-exp: topic_can_exp                   #CAN异常历史数据
+      mqtt:
+        error: topic_mqtt_message_err          #MQTT网关错误数据
+        state: topic_mqtt_state                #分时租赁实时状态历史数据
+        state-exp: topic_mqtt_state_exp        #分时租赁实时状态异常历史数据
+      jt808:
+        error: topic_808_message_err           #808网关错误数据
+        position: topic_jt_position            #808位置历史数据
+        position-exp: topic_jt_position_exp    #808位置异常历史数据
+      tbox:
+        log: topic_tbox_log                    #车机网络日志
+        log-exp: topic_tbox_log_exp            #车机异常网络日志
+
+ccclubs:
+  data:
+    mongodb:
+      #国标mongodb配置
+      gbstandard:
+        host: 114.55.24.97
+        port: 3717
+        username: zkj_user
+        password: zkj2017
+        database: history
+        authenticationDatabase: history
+    #批量任务配置
+    batch:
+      #批量更新单次最大值，最大间隔时间，线程池数量，队列最大长度
+      updateBatchSize: 1000
+      updateMaxDurTime: 3000
+      updateThreads: 20
+      updateQueueMax: 50000
+      #批量写入mongodb单次最大值，最大间隔时间，线程池数量，队列最大长度
+      mongoInsertBatchSize: 2000
+      mongoInsertMaxDurTime: 10000
+      mongoInsertThreads: 20
+      mongoInsertQueueMax: 200000
+      hbaseSrv:
+        host: 120.26.164.203
+        port: 8080
+
+dubbo:
+  scan:
+    annotationPackage: com.ccclubs
+  application:
+    name: rule-engine-srv
+  registry:
+    address: zookeeper://127.0.0.1:2181
+    protocol: zookeeper
+    port: 20660
+  protocol:
+    name: dubbo
+    threads: 100
+    #host: 10.0.10.96
+    port: 20660
+  provider:
+    timeout: 120000
+    retries: -1
+  consumer:
+    timeout: 120000
+    check: false
+
+
+#MQ topic
+mq:
+  topic: terminal
+  car: car
+  protocol: protocol
+  #应用日志
+  log:
+    showSource: false
+
+#阿里云 MQ Consumer 配置
+ons:
+  producerId: PID_terminal_ser
+  consumerId: CID_terminal_ser
+  accessKey: M6dHCyKyKYUCNbW4
+  secretKey: k6gOSH3dNJjFYze4CuxbBWS1PWqvVk
+  consumeThreadNums: 30
+  topic: ser
+  # Tag
+  expression: GB||JT_0200||JT_0201||JT_0704||JT_0900_01||JT_0900_FD||MQTT_41||MQTT_66||MQTT_42||MQTT_64||MQTT_43||MQTT_44||MQTT_45||MQTT_52||MQTT_53||MQTT_60||MQTT_68||MQTT_69||MQTT_6B||MQTT_6C||JT_01F0||JT_7F04
+
+mqttAliyun:
+  #阿里云 mqtt broker 地址
+  host: tcp://mqtt.cn-hangzhou.aliyuncs.com
+  #阿里云 mqtt broker 端口
+  port: 1883
+  #阿里云 mqClient ID 前缀
+  preId: GID_car
+  #阿里云用户名
+  userName: M6dHCyKyKYUCNbW4
+  #阿里云密码
+  pwd: yiBjv0+ZHCqnSXlQCA/W/8EYCkk=
+  #是否记录上行记录
+  logUpDown: true
+
+mqttOwn:
+  #自有 mqtt broker 地址
+  host: tcp://120.26.109.248
+  #阿里云 mqtt broker 端口
+  port: 27736
+  #自有 mqClient ID 前缀
+  preId: rule
+  #用户名
+  userName: qsxiaogang
+  #密码
+  pwd: 513387369
+  #订阅主题
+  #subTopic: ser/car/jhz/rt_0/T1232054/#,ser/car/jhz/rt_0/GB006443/#
+  subTopic: ser/car/jhz/rt_0/#,
+  #是否记录上行记录
+  logUpDown: true
+
+
+druid:
+  driver: com.mysql.jdbc.Driver
+  jdbc:
+    #url: jdbc:mysql://121.199.49.206:3306/ccclubs_data_center?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&serverTimezone=PRC&useSSL=false
+    url: jdbc:mysql://121.199.49.206:3306/vc_data?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&serverTimezone=PRC&useSSL=false
+    username: zkj_user
+    password: kANXZYqf2UzghVY7DnjP
+  initialSize: 2
+  maxActive: 4
+  maxIdle: 2
+  minIdle: 1
+  maxWait: 60000
+  timeBetweenEvictionRunsMillis: 3000
+  minEvictableIdleTimeMillis: 300000
+  maxPoolPreparedStatementPerConnectionSize: 20
+  filters:
+
+

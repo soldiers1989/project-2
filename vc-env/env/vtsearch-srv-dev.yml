@@ -1,0 +1,79 @@
+server:
+  port: 11113
+
+spring:
+  redis:
+    host: 118.178.229.234
+    password: WDnlDnt6f7GuYh
+    port: 63791
+    database: 7
+  data:
+    mongodb:
+      history:
+        host: 114.55.24.97
+        port: 3717
+        username: zkj_user
+        password: zkj2017
+        database: vc_history
+        authenticationDatabase: vc_history
+      remote:
+        host: 114.55.24.97
+        port: 3717
+        username: zkj_user
+        password: zkj2017
+        database: vc_remote
+        authenticationDatabase: vc_remote
+dubbo:
+  scan:
+    annotationPackage: com.ccclubs
+  application:
+    name: vtsearch-srv
+  registry:
+    address: zookeeper://127.0.0.1:2181
+    protocol: zookeeper
+    port: 20760
+  protocol:
+    name: dubbo
+    threads: 100
+    #host: 10.0.10.96
+    port: 20760
+  provider:
+    timeout: 120000
+    retries: -1
+  consumer:
+    timeout: 120000
+    check: false
+
+druid:
+  driver: com.mysql.jdbc.Driver
+  jdbc:
+    url: jdbc:mysql://121.199.49.206:3306/ccclubs_data_center?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&serverTimezone=PRC&useSSL=false
+    username: zkj_user
+    password: kANXZYqf2UzghVY7DnjP
+  initialSize: 2
+  maxActive: 4
+  maxIdle: 2
+  minIdle: 1
+  maxWait: 60000
+  timeBetweenEvictionRunsMillis: 3000
+  minEvictableIdleTimeMillis: 300000
+  maxPoolPreparedStatementPerConnectionSize: 20
+  filters:
+
+#用于主机厂车追溯系统有车辆录入时主动推送，加密的key
+vehicle:
+  push:
+    zhongtai: 0F8987F17765D72BR713A939
+
+#配置业务参数 TODO 临时方案
+#各类型终端的最新插件版本
+terminal:
+  #富士康（车厘子）
+  latestVersionMap[0]: 1327,n/a
+  #中导
+  latestVersionMap[1]: 1027,n/a
+  #慧翰
+  latestVersionMap[2]: 0,n/a
+  #通领
+  latestVersionMap[3]: 1072,SHENGJI(7837CC_1072).fx1
+

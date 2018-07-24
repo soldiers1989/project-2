@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+</head>
+<body>
+<form class="form-horizontal queryform">
+    <div class="form-group">
+        <dl cond="csveId" style="display:none;">
+            <dt>csve_id：</dt>
+            <dd>
+                <input name="csveIdEquals" placeholder="请输入数字" class="form-control">
+            </dd>
+        </dl>
+        <dl cond="csveCarNo">
+            <dt>车牌号：</dt>
+            <dd>
+                <input name="csveCarNoEquals" placeholder="" class="form-control">
+            </dd>
+        </dl>
+
+        <dl cond="csveVin">
+            <dt>车架号：</dt>
+            <dd>
+                <input name="csveVinEquals" placeholder="" class="form-control">
+            </dd>
+        </dl>
+
+        <dl cond="csveEngineNo">
+            <dt>发动机号：</dt>
+            <dd>
+                <input name="csveEngineNoEquals" placeholder="" class="form-control">
+            </dd>
+        </dl>
+
+        <dl cond="csveTeNo">
+            <dt>终端编号：</dt>
+            <dd>
+                <input name="csveTeNoEquals" placeholder="" class="form-control">
+            </dd>
+        </dl>
+        <dl cond="csveAddTime">
+            <dt>车辆添加时间：</dt>
+            <dd class="timergroup">
+                <input name="csveAddTimeStart" placeholder="开始时间" class="form-control timegroupinput"
+                       onclick="laydate({istime:true, format: 'YYYY-MM-DD hh:mm:ss'})">
+                <label class="timegrouplabel">-</label>
+                <input name="csveAddTimeEnd" placeholder="结束时间" class="form-control timegroupinput"
+                       onclick="laydate({istime:true, format: 'YYYY-MM-DD hh:mm:ss'})">
+            </dd>
+        </dl>
+
+        <dl cond="csveIccid">
+            <dt>ICCID：</dt>
+            <dd>
+                <input name="csveIccidEquals" placeholder="" class="form-control">
+            </dd>
+        </dl>
+
+        <dl cond="csveBataccuCode" style="display:none;">
+            <dt>可充电储能系统编码：</dt>
+            <dd>
+                <input name="csveBataccuCodeEquals" placeholder="" class="form-control">
+            </dd>
+        </dl>
+        <dl cond="csveModelCodeSimple" style="display:none;">
+            <dt>车型备案型号：</dt>
+            <dd>
+                <input name="csveModelCodeSimpleEquals" placeholder="" class="form-control">
+            </dd>
+        </dl>
+
+        <dl cond="csveNumber" style="display:none;">
+            <dt>车机号：</dt>
+            <dd>
+                <input name="csveNumberLike" placeholder="" class="form-control">
+            </dd>
+        </dl>
+        <dl cond="csveProdDate" style="display:none;">
+            <dt>出厂日期：</dt>
+            <dd>
+                <input name="csveProdDateEquals" class="form-control layer-date laydate-icon" placeholder=""
+                       onclick="laydate({istime:true, format: 'YYYY-MM-DD hh:mm:ss'})">
+            </dd>
+        </dl>
+
+        <dl cond="csveTeType" style="display:none;">
+            <dt> 终端类型：</dt>
+            <dd>
+                <input name="csveTeTypeEquals" placeholder="请输入关键字" class="form-control searchinput"
+                       dataWhere="csm_te_type" dataUrl="/base/dict/query">
+            </dd>
+        </dl>
+        <dl cond="csveModelCodeFull" style="display:none;">
+            <dt>车型代码：</dt>
+            <dd>
+                <input name="csveModelCodeFullEquals" placeholder="" class="form-control">
+            </dd>
+        </dl>
+        <dl cond="csveTeModel" style="display:none;">
+            <dt>终端型号：</dt>
+            <dd>
+                <input name="csveTeModelEquals" placeholder="" class="form-control">
+            </dd>
+        </dl>
+        <dl cond="csveMobile" style="display:none;">
+            <dt>手机号：</dt>
+            <dd>
+                <input name="csveMobileEquals" placeholder="" class="form-control">
+            </dd>
+        </dl>
+        <div class="querybtns">
+            <button class="btn btn-success " type="button" onclick="operate.query();"><i
+                    class="glyphicon fa fa-search"></i>查询
+            </button>
+            <button class="btn btn-primary" type="button" resetForm><i class="glyphicon fa fa-reply"></i>清空</button>
+            <div class="btn-group">
+                <button type="button" class="btn btn-default btn-outline dropdown-toggle" data-toggle="dropdown"
+                        aria-expanded="false">
+                    <i class="glyphicon glyphicon-list"></i>更多条件
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu tableMenu conditionMenu" role="menu">
+                    <li><label><input cond="csveId" value="csveId" type="checkbox"
+                                      onclick='showHideCondition(this, this.value);'>csve_id</label></li>
+                    <li><label><input cond="csveVin" value="csveVin" type="checkbox"
+                                      onclick='showHideCondition(this, this.value);'>车架号</label></li>
+                    <li><label><input cond="csveTeNo" value="csveTeNo" type="checkbox"
+                                      onclick='showHideCondition(this, this.value);'>终端编号</label></li>
+                    <li><label><input cond="csveIccid" value="csveIccid" type="checkbox"
+                                      onclick='showHideCondition(this, this.value);'>iccid</label></li>
+                    <li><label><input cond="csveEngineNo" value="csveEngineNo" type="checkbox"
+                                      onclick='showHideCondition(this, this.value);'>发动机号</label></li>
+                    <li><label><input cond="csveBataccuCode" value="csveBataccuCode" type="checkbox"
+                                      onclick='showHideCondition(this, this.value);'>可充电储能系统编码</label></li>
+                    <li><label><input cond="csveModelCodeSimple" value="csveModelCodeSimple" type="checkbox"
+                                      onclick='showHideCondition(this, this.value);'>车型备案型号</label></li>
+                    <li><label><input cond="csveCarNo" value="csveCarNo" type="checkbox"
+                                      onclick='showHideCondition(this, this.value);'>真实车牌</label></li>
+                    <li><label><input cond="csveNumber" value="csveNumber" type="checkbox"
+                                      onclick='showHideCondition(this, this.value);'>车机号</label></li>
+                    <li><label><input cond="csveProdDate" value="csveProdDate" type="checkbox"
+                                      onclick='showHideCondition(this, this.value);'>出厂日期</label></li>
+                    <li><label><input cond="csveAddTime" value="csveAddTime" type="checkbox"
+                                      onclick='showHideCondition(this, this.value);'>车辆添加时间</label></li>
+                    <li><label><input cond="csveTeType" value="csveTeTypeText" type="checkbox"
+                                      onclick='showHideCondition(this, this.value);'> 终端类型:0:车厘子,1:中导,2:慧翰,3:通领;</label>
+                    </li>
+                    <li><label><input cond="csveModelCodeFull" value="csveModelCodeFull" type="checkbox"
+                                      onclick='showHideCondition(this, this.value);'>车型代码</label></li>
+                    <li><label><input cond="csveTeModel" value="csveTeModel" type="checkbox"
+                                      onclick='showHideCondition(this, this.value);'>终端型号</label></li>
+                    <li><label><input cond="csveMobile" value="csveMobile" type="checkbox"
+                                      onclick='showHideCondition(this, this.value);'>手机号</label></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+</form>
+</body>
+<script type="text/javascript">
+    $(".searchinput").each(function () {
+        $(this).searchinput({});
+    });
+    $("button[resetForm]").click(function () {
+        resetForm($(this).parents("form")[0]);
+    });
+
+    $(".conditionMenu").find("input[type=checkbox]").each(function () {
+        $(this).click(function () {
+            var flag = $(this).is(':checked');
+            $(".queryform").find("dl[cond=" + $(this).attr("cond") + "]").each(function () {
+                if (flag) {
+                    $(this).show();
+                } else {
+                    $(this).val("");
+                    $(this).hide();
+                }
+            });
+            $(window).trigger("resize");
+        });
+    });
+</script>
